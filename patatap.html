@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Patatap Model</title>
+	<script type="text/javascript" src="js/paper-full.js"></script>
+	<script type="text/javascript" src="howler.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+    <script>
+        var song = new Audio();
+        function load(){
+            song.src = 'sounds/corona.mp3'
+            song.play();
+        }
+      
+       window.addEventListener("load", load);
+    </script>
+    <script type="text/paperscript" canvas="myCanvas">
+        
+        var keyData = {
+            a: {
+                color: "pink",
+                sound: new Howl({
+                    src: ['sounds/clay.mp3']
+                })
+            },
+            s: {
+                color: "blue",
+                sound: new Howl({
+                    src: ['sounds/bubbles.mp3']
+                })
+            },
+            m: {
+                color: "purple",
+                sound: new Howl({
+                    src: ['sounds/corona.mp3']
+                })
+            }
+        };
+    
+        var circles = [];
+        function onKeyDown(event){
+            if(keyData[event.key]){
+            //using the view and size properties of paper.js
+            var maxPoint = new Point(view.size.width, view.size.height);
+            //using the Point.random function
+            var randomPoint = Point.random();
+            //multiply the size of the height and width to the randomized number
+            var point = maxPoint * randomPoint;
+            var animateCircle = new Path.Circle(point, 500);
+            animateCircle.fillColor = keyData[event.key].color;
+            keyData[event.key].sound.play();
+
+            circles.push(animateCircle);
+        }
+    }
+
+        function onFrame(event){
+            for(var i=0; i < circles.length; i++){
+                circles[i].fillColor.hue += 1;
+                circles[i].scale(.9);
+            }
+        }
+    </script>
+</head>
+<body>
+	<canvas id="myCanvas" resize></canvas>
+</body>
+</html>
